@@ -5,8 +5,8 @@ let app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 3002; 
-var router = express.Router();
+let port = process.env.PORT || 3002; 
+let router = express.Router();
 
 router.get('/', function(req, res) {
     res.json({ message: 'test server up' });   
