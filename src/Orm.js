@@ -10,6 +10,7 @@ import tv4 from 'tv4';
  * 	adapter : 'mysql',//values possible => mysql, mongo
  * 	host : 'localhost',
  * 	port : '3306',
+ * 	user : 'username',
  * 	password 'pass' 	
  * }
  *
@@ -25,8 +26,8 @@ export default class Orm {
 		_setAdapter(configs.adapter);
 	}
 
-	find() {
-
+	find(id, options) {
+		return this.adapter.find(id, options);
 	}
 
 	/**
@@ -72,7 +73,7 @@ export default class Orm {
 
 		switch(adapterType) {
 			case : 'mysql'
-				this.adapter = new MySQL();
+				this.adapter = new MySQL(configs);
 				break;
 			case : 'mongo'
 				this.adapter = new Mongo();
