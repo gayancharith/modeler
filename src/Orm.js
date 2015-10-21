@@ -35,7 +35,22 @@ export default class Orm {
 	 * @return {[type]}     [description]
 	 */
 	create(obj) {
-		this.adapter.create(obj);
+
+		return new Promise((resolve, reject) => {
+
+			_validate(data, schema).then(result=>{
+				return (result);
+			})
+			.then(data=>{
+				this.adapter.create(obj);
+			})
+			.then(result => {
+				resolve(result);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
 	}
 
 	delete() {
