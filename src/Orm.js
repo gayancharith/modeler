@@ -9,6 +9,7 @@ import Mongo from './Mongo';
  * 	adapter : 'mysql',//values possible => mysql, mongo
  * 	host : 'localhost',
  * 	port : '3306',
+ * 	user : 'username',
  * 	password 'pass' 	
  * }
  *
