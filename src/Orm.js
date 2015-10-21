@@ -24,8 +24,8 @@ export default class Orm {
 		_setAdapter(configs.adapter);
 	}
 
-	find() {
-
+	find(id, options) {
+		return this.adapter.find(id, options);
 	}
 
 	create() {
@@ -51,7 +51,7 @@ export default class Orm {
 
 		switch(adapterType) {
 			case : 'mysql'
-				this.adapter = new MySQL();
+				this.adapter = new MySQL(configs);
 				break;
 			case : 'mongo'
 				this.adapter = new Mongo();
