@@ -1,5 +1,6 @@
 import MySQL from './MySQL';
 import Mongo from './Mongo';
+import tv4 from 'tv4';
 
 /**
  * USAGE : 
@@ -29,8 +30,13 @@ export default class Orm {
 		return this.adapter.find(id, options);
 	}
 
-	create() {
-
+	/**
+	 * insert an object to the database
+	 * @param  {Object} obj object to be inserted.
+	 * @return {[type]}     [description]
+	 */
+	create(obj) {
+		this.adapter.create(obj);
 	}
 
 	delete() {
@@ -61,6 +67,57 @@ export default class Orm {
 				throw Error('specified adapter not supported.');
 				break; 
 		}
+	}
+
+	/**
+	 *
+	 * eg : 
+	 *
+	 * schema = {
+	 *
+	 * 	title : 'user model',
+	 * 	type : 'object',
+	 * 	properties : {
+	 * 		firstName : {
+	 * 			type : 'string'
+	 * 		},
+	 * 		lastName : {
+	 * 			type : 'string'
+	 * 		},
+	 * 		email : {
+	 * 			type : 'string',
+	 * 			format : 'email'
+	 * 		}
+	 * 	},
+	 * 	required : ['firstName', 'email']
+	 * }
+	 *
+	 * data = {
+	 *
+	 * 	firstName : 'lahiru',
+	 * 	lastName : 'madhumal',
+	 * 	email : 'madhumal.lahiru.hd@gmail.com'
+	 * 
+	 * }
+	 * 
+	 * _validate(data, schema);
+	 * 
+	 * validates the data using the json schema given
+	 * @param  {Object} data   json object to be validated.
+	 * @param  {object} schema json schema object to be validated against.
+	 * @return {boolean}        valid or not
+	 */
+	_validate(data, schema){
+
+		return new Promise((resolve, reject) = > {
+			tv4.validate(data, schema, function(isValid, validationError){
+				if(isValid){
+					resolve({valid : true});
+				}else{
+					reject({valid : false, error : validationError});
+				}
+			});
+		}); 
 	}
 
 }
