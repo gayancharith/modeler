@@ -11,7 +11,8 @@ import tv4 from 'tv4';
  * 	host : 'localhost',
  * 	port : '3306',
  * 	user : 'username',
- * 	password 'pass' 	
+ * 	password: 'pass', 	
+ * 	db: 'databaseName' 	
  * }
  *
  *
@@ -22,10 +23,24 @@ import tv4 from 'tv4';
  */
 export default class Orm {
 
-	constructor(configs, meta){
+	constructor(configs, meta) {
+		let configs = {
+			adapter: 'mysql', //values possible => mysql, mongo
+			host: 'localhost',
+			port: '3306',
+			user: 'root',
+			password: 'pass',
+			db: 'bloodDonatorDB'
+		}
+
 		_setAdapter(configs.adapter);
 	}
 
+	/**
+	 * @param  {String} id - id of the row
+	 * @param  {Object} options - filter data from the table
+	 * @return {Promise}
+	 */
 	find(id, options) {
 		return this.adapter.find(id, options);
 	}
