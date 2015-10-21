@@ -1,8 +1,21 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import Orm from './src/Orm.js';
+
 let app = express();
-let orm = new Orm();
+
+let configs = {
+	adapter: 'mysql', //values possible => mysql, mongo
+	host: 'localhost',
+	port: '3306',
+	user: 'root',
+	password: 'pass',
+	db: 'bloodDonatorDB'
+}
+let orm = new Orm(configs);
+let id = 5, options = {};
+let data = orm.find(id);
+// orm.end();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
