@@ -56,11 +56,48 @@ export default class MySQL {
 		this.connection.end();
 	}
 
-	create (obj){
-		return obj;
+	/**
+	 * insert a record to the database.
+	 * @param  {String} name of the to be inserted
+	 * @param  {Object} model object to be inserted.
+	 * @return {[type]}       [description]
+	 */
+	create (table, obj){
+
+		let query = this._insertQuery(table, obj);
+
+		return new Promise((resolve, reject) =>{
+			this.connection.query(query, (error, results, fields) =>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			});
+		});
 	}
 
-	_insertQuery (){
-		
+	/**
+	 * generate the query string for insert.
+	 * 
+	 * insert a record to the database.
+	 * @param  {String} name of the to be inserted
+	 * @param  {Object} model object to be inserted.
+	 * @return {String} returns the query string.
+	 */
+	_insertQuery (table, data){
+
+		let fields = Object.keys(data).join();
+		let valuesArr = Object.values(data);
+		let values = "";
+		valuesArr.forEach((value) => {
+			values += "'" + value +"',";
+		});
+
+		values = values.substr(0, values.length-1);
+
+		let query = "INSERT INTO " + table + " ("+ fields + ") VALUES (" + values +");";
+
+		return query;
 	}
 }
