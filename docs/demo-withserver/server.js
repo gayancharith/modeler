@@ -36,13 +36,24 @@ router.get('/', function(req, res) {
 		lastName : 'madhumal',
 		email : 'email'
 	};
-	console.log('creating user');
+
+	let request = {
+		title : 'lahiru',
+		request : 'request'
+	};
 
 	orm.user.create(user).then(result=>{
 		console.log(result);
 	}).catch(err=>{
 		console.log(err);
 	});
+
+	orm.request.create(request).then(result=>{
+		console.log(result);
+	}).catch(err=>{
+		console.log(err);
+	});
+
     res.json({ message: 'test server up' });   
 });
 

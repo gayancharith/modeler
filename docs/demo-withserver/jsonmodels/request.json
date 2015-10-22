@@ -1,0 +1,14 @@
+{
+	"title" : "request",
+	"type" : "object",
+	"properties" : {
+		"title" : {
+			"type" : "string"
+		},
+		"request" : {
+			"type" : "string"
+		}
+	},
+
+	"required" : ["title", "request"]
+}

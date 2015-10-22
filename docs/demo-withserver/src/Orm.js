@@ -57,6 +57,8 @@ export default class Orm {
 	 */
 	create(model ,obj) {
 
+		console.log('creating a '+ model);
+		
 		let modelSchema = this.schema[model];
 
 		return new Promise((resolve, reject) => {
@@ -128,7 +130,7 @@ export default class Orm {
 			this.schema[model] = schemaContent;
 			this[model] = {};
 			this[model].create = this.create.bind(this, model);
-			
+
 		});
 	}
 
