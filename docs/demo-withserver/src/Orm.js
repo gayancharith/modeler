@@ -24,8 +24,7 @@ let schema = require('../jsonmodels/user.json');
  * orm.user.create(user);
  */
 export default class Orm {
-
-	constructor(configs) {
+	constructor(configs, meta) {
 		this._setAdapter(configs);
 	}
 
@@ -35,7 +34,16 @@ export default class Orm {
 	 * @return {Promise}
 	 */
 	find(id, options) {
-		return this.adapter.find(id, options);
+		return new Promise((resolve, reject) => {
+			this.adapter.find(id, options)
+			.then(foundData => {
+				console.log(foundData);
+				resolve(foundData);
+			})
+			.catch((error) => {
+				reject(error);
+			});
+		});
 	}
 
 	/**
@@ -68,6 +76,13 @@ export default class Orm {
 
 	update() {
 
+	}
+
+	/**
+	 * destroy the connection
+	 */
+	end() {
+		this.adapter.end();
 	}
 
 	/**

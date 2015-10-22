@@ -4,7 +4,7 @@ export default class MySQL {
 
 	constructor(configs) {
 
-		let pool = mysql.createConnection({
+		this.connection = mysql.createConnection({
 			connectionLimit: 10,
 			host: configs.host,
 			user: configs.user,
@@ -13,19 +13,37 @@ export default class MySQL {
 
 		});
 
-		pool.connect();
+		this.connection.connect();
 
-		pool.query('SELECT * FROM request', function(err, rows, fields) {
-			if (err) throw err;
+		// pool.query('SELECT alias FROM event', function(err, rows, fields) {
+		// 	if (err) throw err;
+		// 	console.log(rows);
+		// });
 
-			console.log(rows);
-		});
-
-		pool.end();
+		// pool.end();
 	}
 
+	/**
+	 *	
+	 */
 	find(id, options) {
+		let sql = "SELECT * FROM event WHERE `id`="+ id;
 
+		return new Promise((resolve, reject) => {
+			this.connection.query(sql, (error, results, fields) => {
+				if (error) {
+					reject(error);
+				} else {
+					console.log(results);
+					resolve(results);
+				}
+			});
+		});
+	}
+
+	end() {
+		console.log('connection ends');
+		this.connection.end();
 	}
 
 	create (obj){
