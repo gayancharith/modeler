@@ -1,8 +1,8 @@
+import path from 'path';
+import fs from 'fs';
 import MySQL from './MySQL';
 import Mongo from './Mongo';
 import tv4 from 'tv4';
-
-let schema = require('../jsonmodels/user.json');
 
 /**
  * USAGE : 
@@ -24,7 +24,10 @@ let schema = require('../jsonmodels/user.json');
  * orm.user.create(user);
  */
 export default class Orm {
+
 	constructor(configs, meta) {
+		this.schema = [];
+		this._loadSchema(configs.schemaDir);
 		this._setAdapter(configs);
 	}
 
@@ -51,11 +54,13 @@ export default class Orm {
 	 * @param  {Object} obj object to be inserted.
 	 * @return {[type]}     [description]
 	 */
-	create(obj) {
+	create(obj, model) {
 
+		let modelSchema = this.schema[model];
+		
 		return new Promise((resolve, reject) => {
 
-			this._validate(obj, schema).then(result=>{
+			this._validate(obj, modelSchema).then(result=>{
 				return (result);
 			})
 			.then(data=>{
@@ -89,7 +94,7 @@ export default class Orm {
 	 * Set the adapter type acording to the database to be used.
 	 * @param {string} adapter currently only 'mysql' and 'mongo' values are supported
 	 */
-	_setAdapter(configs){
+	_setAdapter (configs){
 
 		if(!configs.adapter)
 			throw Error('adapter not set.');
@@ -105,6 +110,21 @@ export default class Orm {
 				throw Error('specified adapter not supported.');
 				break; 
 		}
+	}
+
+	/**
+	 * [_loadSchema description]
+	 * @param  {[type]} schemaDir [description]
+	 * @return {[type]}           [description]
+	 */
+	_loadSchema (schemaDir){
+
+		let files = fs.readdirSync(schemaDir);
+		files.forEach((file)=>{
+			let schemaContent = require(path.join(schemaDir + '/', file));
+			let model = schemaContent.title;
+			this.schema[model] = schemaContent;
+		});
 	}
 
 	/**

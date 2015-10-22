@@ -1,8 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import Orm from './src/Orm.js';
+import path from 'path';
 
 let app = express();
+let appRoot = path.resolve(__dirname);
+let schemaroot = appRoot +'/jsonmodels/';
+
+console.log(schemaroot);
 
 let configs = {
 	adapter: 'mysql', //values possible => mysql, mongo
@@ -10,7 +15,8 @@ let configs = {
 	port: '3306',
 	user: 'root',
 	password: 'pass',
-	db: 'bloodDonatorDB'
+	db: 'bloodDonatorDB',
+	schemaDir : schemaroot
 }
 let orm = new Orm(configs);
 let id = 5, options = {};
@@ -27,11 +33,12 @@ router.get('/', function(req, res) {
 
 	let user = {
 		firstName : 'lahiru',
+		lastName : 'madhumal',
 		email : 'email'
 	};
 	console.log('creating user');
 
-	orm.create(user).then(result=>{
+	orm.create(user,'user').then(result=>{
 		console.log(result);
 	}).catch(err=>{
 		console.log(err);
