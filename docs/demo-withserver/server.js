@@ -38,7 +38,7 @@ router.get('/', function(req, res) {
 	};
 	console.log('creating user');
 
-	orm.create(user,'user').then(result=>{
+	orm.user.create(user).then(result=>{
 		console.log(result);
 	}).catch(err=>{
 		console.log(err);

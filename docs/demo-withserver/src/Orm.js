@@ -14,7 +14,8 @@ import tv4 from 'tv4';
  * 	port : '3306',
  * 	user : 'username',
  * 	password: 'pass', 	
- * 	db: 'databaseName' 	
+ * 	db: 'databaseName',
+ * 	schemaDir : '<directory which contain the json schema>' 	
  * }
  *
  *
@@ -25,7 +26,7 @@ import tv4 from 'tv4';
  */
 export default class Orm {
 
-	constructor(configs, meta) {
+	constructor(configs) {
 		this.schema = [];
 		this._loadSchema(configs.schemaDir);
 		this._setAdapter(configs);
@@ -54,10 +55,10 @@ export default class Orm {
 	 * @param  {Object} obj object to be inserted.
 	 * @return {[type]}     [description]
 	 */
-	create(obj, model) {
+	create(model ,obj) {
 
 		let modelSchema = this.schema[model];
-		
+
 		return new Promise((resolve, reject) => {
 
 			this._validate(obj, modelSchema).then(result=>{
@@ -121,9 +122,13 @@ export default class Orm {
 
 		let files = fs.readdirSync(schemaDir);
 		files.forEach((file)=>{
+
 			let schemaContent = require(path.join(schemaDir + '/', file));
 			let model = schemaContent.title;
 			this.schema[model] = schemaContent;
+			this[model] = {};
+			this[model].create = this.create.bind(this, model);
+			
 		});
 	}
 
