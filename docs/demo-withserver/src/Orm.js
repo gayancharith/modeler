@@ -2,6 +2,8 @@ import MySQL from './MySQL';
 import Mongo from './Mongo';
 import tv4 from 'tv4';
 
+let schema = require('../jsonmodels/user.json');
+
 /**
  * USAGE : 
  * 
@@ -23,16 +25,7 @@ import tv4 from 'tv4';
  */
 export default class Orm {
 
-	constructor() {
-		let configs = {
-			adapter: 'mysql', //values possible => mysql, mongo
-			host: 'localhost',
-			port: '3306',
-			user: 'root',
-			password: 'pass',
-			db: 'bloodDonatorDB'
-		}
-
+	constructor(configs) {
 		this._setAdapter(configs);
 	}
 
@@ -54,11 +47,11 @@ export default class Orm {
 
 		return new Promise((resolve, reject) => {
 
-			_validate(data, schema).then(result=>{
+			this._validate(obj, schema).then(result=>{
 				return (result);
 			})
 			.then(data=>{
-				this.adapter.create(obj);
+				return this.adapter.create(obj);
 			})
 			.then(result => {
 				resolve(result);
@@ -140,13 +133,14 @@ export default class Orm {
 	_validate(data, schema){
 
 		return new Promise((resolve, reject) => {
-			tv4.validate(data, schema, function(isValid, validationError){
-				if(isValid){
-					resolve({valid : true});
-				}else{
-					reject({valid : false, error : validationError});
-				}
-			});
+
+			let result = tv4.validate(data, schema);
+
+			if(result){
+				resolve(result);
+			}else{
+				reject(tv4.error);
+			}			
 		}); 
 	}
 
