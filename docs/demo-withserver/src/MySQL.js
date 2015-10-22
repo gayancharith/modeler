@@ -59,4 +59,8 @@ export default class MySQL {
 	create (obj){
 		return obj;
 	}
+
+	_insertQuery (){
+		
+	}
 }
