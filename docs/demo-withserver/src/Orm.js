@@ -57,8 +57,6 @@ export default class Orm {
 	 */
 	create(model ,obj) {
 
-		console.log('creating a '+ model);
-		
 		let modelSchema = this.schema[model];
 
 		return new Promise((resolve, reject) => {
@@ -67,7 +65,7 @@ export default class Orm {
 				return (result);
 			})
 			.then(data=>{
-				return this.adapter.create(obj);
+				return this.adapter.create(model, obj);
 			})
 			.then(result => {
 				resolve(result);
