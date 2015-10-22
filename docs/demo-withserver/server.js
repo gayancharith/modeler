@@ -19,7 +19,7 @@ let configs = {
 	schemaDir : schemaroot
 }
 let orm = new Orm(configs);
-let id = 5, options = {};
+let id = 6, options = {};
 let data = orm.find(id);
 // orm.end();
 // 
