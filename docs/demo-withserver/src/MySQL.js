@@ -26,8 +26,10 @@ export default class MySQL {
 	/**
 	 *	
 	 */
-	find(id, options) {
-		let sql = "SELECT * FROM event WHERE `id`="+ id;
+	find(options) {
+
+		let query = this.jsonToQueryString(options);
+		let sql = "SELECT * FROM event WHERE "+ query;
 
 		return new Promise((resolve, reject) => {
 			this.connection.query(sql, (error, results, fields) => {
@@ -39,6 +41,14 @@ export default class MySQL {
 				}
 			});
 		});
+	}
+
+	jsonToQueryString(json) {
+		return (
+			Object.keys(json).map(function(key) {
+				return ( "`"+ key + "`='" + json[key] + "'" );
+			}).join('&&')
+		);
 	}
 
 	end() {

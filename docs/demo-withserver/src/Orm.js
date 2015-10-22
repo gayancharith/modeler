@@ -33,13 +33,15 @@ export default class Orm {
 	}
 
 	/**
-	 * @param  {String} id - id of the row
+	 * find an object from the database using options
 	 * @param  {Object} options - filter data from the table
 	 * @return {Promise}
 	 */
-	find(id, options) {
+	find(options) {
+		
 		return new Promise((resolve, reject) => {
-			this.adapter.find(id, options)
+
+			this.adapter.find(options)
 			.then(foundData => {
 				console.log(foundData);
 				resolve(foundData);

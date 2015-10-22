@@ -19,8 +19,8 @@ let configs = {
 	schemaDir : schemaroot
 }
 let orm = new Orm(configs);
-let id = 6, options = {};
-let data = orm.find(id);
+let options = { title: 'sample event 5', id: 4, alias: 'sample-event-5-6', alias: 'sample-event-5' };
+let data = orm.find(options);
 // orm.end();
 // 
 app.use(bodyParser.urlencoded({ extended: true }));
