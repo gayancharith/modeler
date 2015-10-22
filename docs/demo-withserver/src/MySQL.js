@@ -24,12 +24,13 @@ export default class MySQL {
 	}
 
 	/**
-	 *	
+	 * find a record from the database.
+	 * @param  {Object} options filter object
+	 * @return {[type]}       [description]
 	 */
-	find(options) {
-
-		let query = this.jsonToQueryString(options);
-		let sql = "SELECT * FROM event WHERE "+ query;
+	find(table, options) {
+		
+		let sql = this._findQuery(table, options);
 
 		return new Promise((resolve, reject) => {
 			this.connection.query(sql, (error, results, fields) => {
@@ -41,14 +42,6 @@ export default class MySQL {
 				}
 			});
 		});
-	}
-
-	jsonToQueryString(json) {
-		return (
-			Object.keys(json).map(function(key) {
-				return ( "`"+ key + "`='" + json[key] + "'" );
-			}).join('&&')
-		);
 	}
 
 	end() {
@@ -100,4 +93,18 @@ export default class MySQL {
 
 		return query;
 	}
+
+	/**
+	 * create a sql search query string
+	 * @param  {[type]} json [description]
+	 * @return {[type]}      [description]
+	 */
+	_findQuery(table, json) {
+		let queryString = Object.keys(json).map(function(key) {
+			return ("`" + key + "`='" + json[key] + "'");
+		}).join('&&');
+
+		let query = "SELECT * FROM "+ table +" WHERE "+ queryString;
+		return query;
+	}	
 }

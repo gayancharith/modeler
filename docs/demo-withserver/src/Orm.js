@@ -37,13 +37,12 @@ export default class Orm {
 	 * @param  {Object} options - filter data from the table
 	 * @return {Promise}
 	 */
-	find(options) {
-		
+	find(model, options) {
+
 		return new Promise((resolve, reject) => {
 
-			this.adapter.find(options)
+			this.adapter.find(model, options)
 			.then(foundData => {
-				console.log(foundData);
 				resolve(foundData);
 			})
 			.catch((error) => {
@@ -129,8 +128,8 @@ export default class Orm {
 			let model = schemaContent.title;
 			this.schema[model] = schemaContent;
 			this[model] = {};
-			this[model].create = this.create.bind(this, model);
-
+			this[model].create = this.create.bind(this, model);			
+			this[model].find = this.find.bind(this, model);			
 		});
 	}
 

@@ -19,9 +19,6 @@ let configs = {
 	schemaDir : schemaroot
 }
 let orm = new Orm(configs);
-let options = { title: 'sample event 5', id: 4, alias: 'sample-event-5-6', alias: 'sample-event-5' };
-let data = orm.find(options);
-// orm.end();
 // 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -42,17 +39,29 @@ router.get('/', function(req, res) {
 		request : 'request'
 	};
 
+	let event = {
+		id: 4,
+		alias: 'sample-event-5'
+	};
+
 	orm.user.create(user).then(result=>{
 		console.log(result);
 	}).catch(err=>{
 		console.log(err);
 	});
 
-	orm.request.create(request).then(result=>{
+	// orm.request.create(request).then(result=>{
+	// 	console.log(result);
+	// }).catch(err=>{
+	// 	console.log(err);
+	// });
+
+	orm.user.find(event).then(result=>{
+		console.log('user >>>>');
 		console.log(result);
 	}).catch(err=>{
 		console.log(err);
-	});
+	});	
 
     res.json({ message: 'test server up' });   
 });
