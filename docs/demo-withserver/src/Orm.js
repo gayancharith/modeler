@@ -77,8 +77,24 @@ export default class Orm {
 		});
 	}
 
-	delete() {
+	/**
+	 * deletes objects from the database based on constraints.
+	 * @param  {string} model table or collection name.
+	 * @param  {Object} opts  delete constraints.
+	 * @return {Promise}
+	 */
+	delete(model, opts) {
 
+		let modelSchema = this.schema[model];
+
+		return new Promise((resolve, reject) => {
+			this.adapter.delete(model, opts).then(result =>{
+				resolve(result);
+			})
+			.catch(error => {
+				reject(error);
+			});
+		});
 	}
 
 	update() {
@@ -129,7 +145,9 @@ export default class Orm {
 			this.schema[model] = schemaContent;
 			this[model] = {};
 			this[model].create = this.create.bind(this, model);			
-			this[model].find = this.find.bind(this, model);			
+			this[model].find = this.find.bind(this, model);
+			this[model].delete = this.delete.bind(this, model);	
+
 		});
 	}
 
