@@ -111,9 +111,10 @@ export default class MySQL {
 	_queryBuilder(){
 
 		let opts = {
+
 			name : 'lahiru',
-			age : '28',
-			or : [{married : 'true', drivingLiscence : 'yes'}, {sex : 'male'}],
+			age : { '<' : '28'},
+			or : [{married : {'>' : 32}, drivingLiscence : 'yes'}, {sex : 'male'}, {abc : { '>' : 5 }}],
 			city : 'kelaniya'
 		}
 
@@ -125,6 +126,11 @@ export default class MySQL {
 				query += " AND " + this._orQuery(opts[key]);
 			}else if (typeof opts[key] != 'object'){
 				query += " AND " + key + "='" + opts[key] +"'";
+			}else if (typeof opts[key] == 'object' && Object.keys(opts[key]).length == 1) {
+				Object.keys(opts[key]).map((idx) =>{
+					if(idx == '<' || idx == '>')
+						query += " AND " + this._compareQuery(key, opts[key]) + " ";
+				});
 			}
 		});
 		query = query.substr(4,query.length-1);
@@ -140,8 +146,13 @@ export default class MySQL {
 
 			if(keys.length > 1){
 				orQ += this._andQuery(obj) + " OR ";
-			}else if(keys.length == 1){
+			}else if(keys.length == 1 && typeof obj[keys[0]] != 'object'){
 				orQ += keys[0] + "='" + obj[keys[0]] + "' OR ";
+			}else if(keys.length == 1 && typeof obj[keys[0]] == 'object'){
+				let orObj = obj[keys[0]];
+				let orObjKeys = Object.keys(orObj);
+				if(orObjKeys.length == 1 && (orObjKeys[0] == '<' || orObjKeys[0] == '>'))
+					orQ += this._compareQuery(keys[0], orObj) + " OR ";
 			}
 		});
 
@@ -159,10 +170,36 @@ export default class MySQL {
 				andQuery += this._orQuery(obj[key]) + " AND ";
 			}else if(typeof obj[key] != 'object'){
 				andQuery += key + "='" + obj[key] + "' AND ";
+			}else if(typeof obj[key] == 'object' && Object.keys(obj[key]).length == 1){
+				Object.keys(obj[key]).map((idx) =>{
+					if(idx == '<' || idx == '>')
+						andQuery += this._compareQuery(key, obj[key]) + " AND ";
+				});
 			}
 		});
 		andQuery = andQuery.substr(0,andQuery.length-4);
 		andQuery += ")";
 		return andQuery;
+	}
+
+	_compareQuery(objKey, obj){
+
+		let compQuery = "";
+		let keys = Object.keys(obj);
+
+		if(keys.length != 1){
+			throw Error('Format error : compare object cannot have multiple keys');
+		} else{
+			keys.map((key) =>{
+
+				if(typeof obj[key] == 'object'){
+					throw Error ('Format error : compare value cannot be an object');
+				}else{
+					compQuery = objKey + " " + key + "'" + obj[key] + "'";
+				}
+			});
+		}
+
+		return compQuery;
 	}	
 }
