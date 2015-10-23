@@ -104,7 +104,6 @@ export default class Orm {
 		switch(configs.adapter) {
 			case 'mysql':
 				this.adapter = new MySQL(configs);
-				this.adapter._queryBuilder();
 				break;
 			case 'mongo':
 				this.adapter = new Mongo();
