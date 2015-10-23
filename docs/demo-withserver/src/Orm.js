@@ -15,12 +15,14 @@ import tv4 from 'tv4';
  * 	user : 'username',
  * 	password: 'pass', 	
  * 	db: 'databaseName',
- * 	schemaDir : '<directory which contain the json schema>' 	
+ * 	schemaDir : '<directory which contain the json schema>',
+ * 	connectionLimit : 20 //optional
+ * 		
  * }
  *
  *
  * import Orm from 'Orm';
- * let orm = new Orm(configs, meta);;
+ * let orm = new Orm(configs);
  * let user = {firstName : 'gayan', lastName : 'Madhumal'};
  * orm.user.create(user);
  */

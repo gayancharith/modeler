@@ -3,24 +3,19 @@ import mysql from 'mysql';
 export default class MySQL {
 
 	constructor(configs) {
+		let limit = 10;
+		if(configs.connectionLimit){
+			limit = configs.connectionLimit;
+		}
 
-		this.connection = mysql.createConnection({
-			connectionLimit: 10,
+		this.pool = mysql.createPool({
+			connectionLimit: limit,
 			host: configs.host,
 			user: configs.user,
 			password: configs.password,
 			database: configs.db
 
 		});
-
-		this.connection.connect();
-
-		// pool.query('SELECT alias FROM event', function(err, rows, fields) {
-		// 	if (err) throw err;
-		// 	console.log(rows);
-		// });
-
-		// pool.end();
 	}
 
 	/**
@@ -33,7 +28,7 @@ export default class MySQL {
 		let sql = this._findQuery(table, options);
 
 		return new Promise((resolve, reject) => {
-			this.connection.query(sql, (error, results, fields) => {
+			this.pool.query(sql, (error, results, fields) => {
 				if (error) {
 					reject(error);
 				} else {
@@ -46,7 +41,7 @@ export default class MySQL {
 
 	end() {
 		console.log('connection ends');
-		this.connection.end();
+		this.pool.end();
 	}
 
 	/**
@@ -60,7 +55,7 @@ export default class MySQL {
 		let query = this._insertQuery(table, obj);
 
 		return new Promise((resolve, reject) =>{
-			this.connection.query(query, (error, results, fields) =>{
+			this.pool.query(query, (error, results, fields) =>{
 				if(error){
 					reject(error);
 				}else{
@@ -80,7 +75,7 @@ export default class MySQL {
 
 		let query = this._deleteQuery(table, opts);
 		return new Promise((resolve, reject) =>{
-			this.connection.query(query, (error, results, fields) => {
+			this.pool.query(query, (error, results, fields) => {
 				if(error){
 					reject(error);
 				}else{
