@@ -110,16 +110,58 @@ export default class MySQL {
 	}
 
 	/**
-	 * create a sql search query string
-	 * @param  {[type]} json [description]
-	 * @return {[type]}      [description]
+	 * Generates the query string for select query
+	 * @param  {String} table table name
+	 * @param  {Object} opts  select criteria
+	 * @return {String}       [query string]
 	 */
-	_findQuery(table, json) {
-		let queryString = Object.keys(json).map(function(key) {
-			return ("`" + key + "`='" + json[key] + "'");
-		}).join('&&');
+	_findQuery(table, opts) {
 
-		let query = "SELECT * FROM "+ table +" WHERE "+ queryString;
+		let query = "";
+		let selectColumns = opts.selectColumns; //select Columns type sould be an array 
+
+		if(!selectColumns){
+			query += "SELECT * FROM " + table + " WHERE " + this._queryBuilder(opts);
+		}else {
+			query+= "SELECT ";
+			let columns = "";
+			selectColumns.forEach((column) =>{
+				columns += column +",";
+			});
+
+			columns = columns.substr(0,columns.length-2);
+			delete opts.selectColumns;
+			query += columns + " FROM " + table " WHERE " + this._queryBuilder(opts);
+		}
+
+		return query;
+	}
+
+	/**
+	 * Generates the query string for update query
+	 * @param  {String} table     table to be updated
+	 * @param  {Object} updateObj update values
+	 * @param  {Object} opts      update criteria
+	 * @return {String}           returns the update query string
+	 */
+	_updateQuery(table, updateObj, opts) {
+
+		let query = "";
+		let updateKeys = Object.keys(updateObj);
+
+		if(!updateObj || updateKeys.length == 0){
+			throw Error('update tables or values are not set.');
+			return null;
+		}
+
+		query += "UPDATE " + table + " SET";
+		let setString = "";
+		updateKeys.forEach((key) =>{
+			setString += " " + key + "='" + updateObj[key] + "',";
+		});
+		setString = setString.substr(0,setString.length-2);
+
+		query += setString + " WHERE " + _queryBuilder(opts);
 		return query;
 	}
 
