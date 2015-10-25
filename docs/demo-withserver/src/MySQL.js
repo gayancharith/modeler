@@ -1,5 +1,9 @@
 import mysql from 'mysql';
 
+/**
+ * converts the json object queries for Mysql
+ * queries and execte the converted mysql statements.
+ */
 export default class MySQL {
 
 	constructor(configs) {
@@ -16,6 +20,15 @@ export default class MySQL {
 			database: configs.db
 
 		});
+	}
+
+	/**
+	 * disconnet all the pool connections
+	 * @return
+	 */
+	end() {
+		console.log('connection ends');
+		this.pool.end();
 	}
 
 	/**
@@ -39,9 +52,25 @@ export default class MySQL {
 		});
 	}
 
-	end() {
-		console.log('connection ends');
-		this.pool.end();
+	/**
+	 * update records in a table
+	 * @param  {String} table     table name
+	 * @param  {Object} updateObj update values
+	 * @param  {Object} opts      update criteria
+	 * @return {Object}           result
+	 */
+	update(table, updateObj, opts) {
+
+		let query = this._updateQuery(table, updateObj, opts);
+		return new Promise((resolve, reject) =>{
+			thi.pool.query(query, (error, results, fields) =>{
+				if(error){
+					reject(error);
+				}else{
+					resolve(results);
+				}
+			});
+		});
 	}
 
 	/**
@@ -84,6 +113,8 @@ export default class MySQL {
 			});
 		});
 	}
+
+
 
 	/**
 	 * generate the query string for insert.
