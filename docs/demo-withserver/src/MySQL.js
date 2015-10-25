@@ -62,11 +62,15 @@ export default class MySQL {
 	update(table, updateObj, opts) {
 
 		let query = this._updateQuery(table, updateObj, opts);
-		return new Promise((resolve, reject) =>{
-			thi.pool.query(query, (error, results, fields) =>{
-				if(error){
+		console.log(query);
+
+		return new Promise((resolve, reject) => {
+			this.pool.query(sql, (error, results, fields) => {
+				if (error) {
+					console.log(error);
 					reject(error);
-				}else{
+				} else {
+					console.log(results);
 					resolve(results);
 				}
 			});
@@ -154,17 +158,16 @@ export default class MySQL {
 		if(!selectColumns){
 			query += "SELECT * FROM " + table + " WHERE " + this._queryBuilder(opts);
 		}else {
-			query+= "SELECT ";
 			let columns = "";
+			query += "SELECT ";
 			selectColumns.forEach((column) =>{
 				columns += column +",";
 			});
 
-			columns = columns.substr(0,columns.length-2);
+			columns = columns.substr(0,columns.length-1);
 			delete opts.selectColumns;
-			query += columns + " FROM " + table " WHERE " + this._queryBuilder(opts);
+			query += columns + " FROM " + table + " WHERE " + this._queryBuilder(opts);
 		}
-
 		return query;
 	}
 
@@ -190,9 +193,9 @@ export default class MySQL {
 		updateKeys.forEach((key) =>{
 			setString += " " + key + "='" + updateObj[key] + "',";
 		});
-		setString = setString.substr(0,setString.length-2);
+		setString = setString.substr(0,setString.length-1);
 
-		query += setString + " WHERE " + _queryBuilder(opts);
+		query += setString + " WHERE " + this._queryBuilder(opts);
 		return query;
 	}
 

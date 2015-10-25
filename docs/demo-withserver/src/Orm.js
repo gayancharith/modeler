@@ -99,7 +99,23 @@ export default class Orm {
 		});
 	}
 
-	update() {
+	/**
+	 * update record, objs in a db table/collection
+	 * @param  {string} model     name of the table or collection
+	 * @param  {object} updateObj update values
+	 * @param  {object} opts      update criteria
+	 * @return {Object}           result
+	 */
+	update(model, updateObj, opts) {
+
+		return new Promise((resolve, reject) =>{
+			this.adapter.update(model,updateObj, opts).then(result =>{
+				resolve(result);
+			})
+			.catch(error =>{
+				reject(error);
+			})
+		});
 
 	}
 
@@ -122,6 +138,7 @@ export default class Orm {
 		switch(configs.adapter) {
 			case 'mysql':
 				this.adapter = new MySQL(configs);
+				//this.adapter.update('user', {lastName : 'abc'}, {firstName:'lahiru'});
 				break;
 			case 'mongo':
 				this.adapter = new Mongo();
