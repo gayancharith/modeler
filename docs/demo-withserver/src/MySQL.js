@@ -156,6 +156,11 @@ export default class MySQL {
 		return query;
 	}
 
+	/**
+	 * ceates a query of the type (exp || exp || exp) //eg for exp : age='28' & name = "gayan"
+	 * @param  {Ojbect} orArr query obect
+	 * @return {String}
+	 */
 	_orQuery (orArr){
 
 		let orQ = "(";
@@ -180,6 +185,11 @@ export default class MySQL {
 		return orQ;
 	}
 
+	/**
+	 * creates a query of the type (exp and exp and exp) // eg for exp : name='madhumal' || age = '28'
+	 * @param  {Object} obj query object
+	 * @return {String}
+	 */
 	_andQuery (obj){
 
 		let andQuery = "(";
@@ -201,6 +211,12 @@ export default class MySQL {
 		return andQuery;
 	}
 
+	/**
+	 * returns a string similar to variable<value , variable>value
+	 * @param  {string} objKey
+	 * @param  {object} obj   query object
+	 * @return {string}
+	 */
 	_compareQuery(objKey, obj){
 
 		let compQuery = "";
