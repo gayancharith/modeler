@@ -61,11 +61,11 @@ export default class MySQL {
 	 */
 	update(table, updateObj, opts) {
 
-		let query = this._updateQuery(table, updateObj, opts);
+		let query = this._updateQuery(table, updateObj, opts);		
 		console.log(query);
 
 		return new Promise((resolve, reject) => {
-			this.pool.query(sql, (error, results, fields) => {
+			this.pool.query(query, (error, results, fields) => {
 				if (error) {
 					console.log(error);
 					reject(error);
