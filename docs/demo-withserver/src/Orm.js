@@ -16,7 +16,8 @@ import tv4 from 'tv4';
  * 	password: 'pass', 	
  * 	db: 'databaseName',
  * 	schemaDir : '<directory which contain the json schema>',
- * 	connectionLimit : 20 //optional
+ * 	connectionLimit : 20, //optional
+ * 	migrations : 'alter' //optional. values possible => create, alter. defaults to create
  * 		
  * }
  *
@@ -29,9 +30,27 @@ import tv4 from 'tv4';
 export default class Orm {
 
 	constructor(configs) {
+
 		this.schema = [];
-		this._loadSchema(configs.schemaDir);
+		this.schemaDir = configs.schemaDir;
 		this._setAdapter(configs);
+
+		if(!configs.migrations)
+			configs.migrations = 'create';
+
+		switch(configs.migrations){
+			case 'create' :
+				this._createTableStructure();
+				break;
+			case 'alter' :
+				this._alterTableStructure();
+				break;
+			case 'default' : 
+				throw Error('unsupported migration type.');
+				break;
+		}
+
+		this._loadSchema(configs.schemaDir);
 	}
 
 	/**
@@ -251,6 +270,8 @@ export default class Orm {
 	 */
 	_createTableStructure(){
 
+		this.adapter.createTableStructure(this.schemaDir);
+
 	}
 
 	/**
@@ -258,7 +279,7 @@ export default class Orm {
 	 * @return {[type]} [description]
 	 */
 	_alterTableStructure(){
-
+		this.adapter.alterTableStructure(this.schemaDir);
 	}
 
 }

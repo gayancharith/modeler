@@ -145,6 +145,24 @@ export default class MySQL {
 		
 	}
 
+	/**
+	 * [createTableStructure description]
+	 * @param  {[type]} schemaDir [description]
+	 * @return {[type]}           [description]
+	 */
+	createTableStructure(schemaDir) {
+
+	}
+
+	/**
+	 * [alterTableStructure description]
+	 * @param  {[type]} schemaDir [description]
+	 * @return {[type]}           [description]
+	 */
+	alterTableStructure(schemaDir) {
+
+	}
+
 
 	/**
 	 * generate the query string for insert.
