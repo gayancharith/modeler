@@ -141,7 +141,7 @@ export default class Orm {
 				//this.adapter.update('user', {lastName : 'abc'}, {firstName:'lahiru'});
 				break;
 			case 'mongo':
-				this.adapter = new Mongo();
+				this.adapter = new Mongo(configs);
 				break;
 			default : 
 				throw Error('specified adapter not supported.');
@@ -166,7 +166,7 @@ export default class Orm {
 			this[model].create = this.create.bind(this, model);			
 			this[model].find = this.find.bind(this, model);
 			this[model].delete = this.delete.bind(this, model);	
-
+			this[model].update = this.update.bind(this, model);	
 		});
 	}
 
