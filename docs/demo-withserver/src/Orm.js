@@ -116,7 +116,30 @@ export default class Orm {
 				reject(error);
 			})
 		});
+	}
 
+	/**
+	 * eg: 
+	 *
+	 * query = "UPDATE user SET firstName=? WHERE lastName=?";
+	 * values = ['gayan', 'witharana'];
+	 * orm.query(query, values);
+	 * 
+	 * can be used for custom queries.
+	 * @param  {String} query  sql query
+	 * @param  {Array} values place holder values
+	 * @return {Object}
+	 */
+	query(query, values) {
+
+		return new Promise((resolve, reject) =>{
+			this.adapter.query(query, values).then(result =>{
+				resolve(result);
+			})
+			.catch(error =>{
+				reject(error);
+			});
+		});
 	}
 
 	/**
@@ -166,6 +189,7 @@ export default class Orm {
 			this[model].find = this.find.bind(this, model);
 			this[model].delete = this.delete.bind(this, model);	
 			this[model].update = this.update.bind(this, model);	
+			this.query = this.query.bind(this);
 		});
 	}
 
