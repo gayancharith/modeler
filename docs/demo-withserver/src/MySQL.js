@@ -118,6 +118,32 @@ export default class MySQL {
 		});
 	}
 
+	/**
+	 * eg: 
+	 *
+	 * query = "UPDATE user SET firstName=? WHERE lastName=?";
+	 * values = ['gayan', 'witharana'];
+	 * orm.query(query, values);
+	 * 
+	 * can be used for custom queries.
+	 * @param  {String} query  sql query
+	 * @param  {Array} values place holder values
+	 * @return {Object}
+	 */
+	query(query, values){
+		return new Promise((resolve, reject) =>{
+			this.pool.query(query, values, (error, results) => {
+				if(error){
+					console.log(error);
+					reject(error);
+				}else{
+					console.log(results);
+					resolve(results);
+				}
+			});
+		});
+		
+	}
 
 
 	/**

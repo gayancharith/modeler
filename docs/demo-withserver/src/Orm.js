@@ -138,7 +138,6 @@ export default class Orm {
 		switch(configs.adapter) {
 			case 'mysql':
 				this.adapter = new MySQL(configs);
-				//this.adapter.update('user', {lastName : 'abc'}, {firstName:'lahiru'});
 				break;
 			case 'mongo':
 				this.adapter = new Mongo(configs);
