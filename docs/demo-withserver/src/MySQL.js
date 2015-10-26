@@ -7,11 +7,8 @@ import mysql from 'mysql';
 export default class MySQL {
 
 	constructor(configs) {
-		let limit = 10;
-		if(configs.connectionLimit){
-			limit = configs.connectionLimit;
-		}
-
+		
+		let limit = configs.connectionLimit ? configs.connectionLimit : 10; 
 		this.pool = mysql.createPool({
 			connectionLimit: limit,
 			host: configs.host,
