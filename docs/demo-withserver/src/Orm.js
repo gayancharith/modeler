@@ -245,4 +245,20 @@ export default class Orm {
 		}); 
 	}
 
+	/**
+	 * drop all the tables and create table structure according to the schemas.
+	 * @return {[type]} [description]
+	 */
+	_createTableStructure(){
+
+	}
+
+	/**
+	 * check differences in the tables and schema and update the structure.
+	 * @return {[type]} [description]
+	 */
+	_alterTableStructure(){
+
+	}
+
 }
