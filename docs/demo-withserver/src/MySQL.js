@@ -7,7 +7,7 @@ import mysql from 'mysql';
 export default class MySQL {
 
 	constructor(configs) {
-		
+
 		let limit = configs.connectionLimit ? configs.connectionLimit : 10; 
 		this.pool = mysql.createPool({
 			connectionLimit: limit,
@@ -39,12 +39,7 @@ export default class MySQL {
 
 		return new Promise((resolve, reject) => {
 			this.pool.query(sql, (error, results, fields) => {
-				if (error) {
-					reject(error);
-				} else {
-					console.log(results);
-					resolve(results);
-				}
+				error ? reject(error) : resolve(results);
 			});
 		});
 	}
@@ -63,13 +58,7 @@ export default class MySQL {
 
 		return new Promise((resolve, reject) => {
 			this.pool.query(query, (error, results, fields) => {
-				if (error) {
-					console.log(error);
-					reject(error);
-				} else {
-					console.log(results);
-					resolve(results);
-				}
+				error ? reject(error) : resolve(results);
 			});
 		});
 	}
@@ -86,11 +75,7 @@ export default class MySQL {
 
 		return new Promise((resolve, reject) =>{
 			this.pool.query(query, (error, results, fields) =>{
-				if(error){
-					reject(error);
-				}else{
-					resolve(results);
-				}
+				error ? reject(error) : resolve(results);
 			});
 		});
 	}
@@ -106,11 +91,7 @@ export default class MySQL {
 		let query = this._deleteQuery(table, opts);
 		return new Promise((resolve, reject) =>{
 			this.pool.query(query, (error, results, fields) => {
-				if(error){
-					reject(error);
-				}else{
-					resolve(results);
-				}
+				error ? reject(error) : resolve(results);
 			});
 		});
 	}
@@ -130,13 +111,7 @@ export default class MySQL {
 	query(query, values){
 		return new Promise((resolve, reject) =>{
 			this.pool.query(query, values, (error, results) => {
-				if(error){
-					console.log(error);
-					reject(error);
-				}else{
-					console.log(results);
-					resolve(results);
-				}
+				error ? reject(error) : resolve(results);
 			});
 		});
 		
